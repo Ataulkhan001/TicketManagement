@@ -2,8 +2,10 @@ package com.ticketmanagement.controller;
 
 
 import com.ticketmanagement.model.Ticket;
-import com.ticketmanagement.repository.TicketRepo;
+import com.ticketmanagement.dao.TicketRepo;
+import com.ticketmanagement.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,50 +15,48 @@ import java.util.Optional;
 @RequestMapping("/approver")
 public class ApproverController {
 
+
     @Autowired
-    TicketRepo ticketRepo;
+    TicketService ticketService;
 
     @GetMapping("/get")
-    public Optional<Ticket> findTicketById(@RequestParam Long id)
-    {
-        return ticketRepo.findById(id);
+    public ResponseEntity<?> findTicketById(@RequestParam Long id) throws Exception {
+
+        ResponseEntity<?> response = ticketService.getTicketById(id);
+        return response;
     }
 
     @GetMapping("/getByCat")
-    public ArrayList<Ticket> findTicktesByCategory(@RequestParam String category)
+    public ArrayList<?> findTicketsByCategory(@RequestParam String category)
     {
-        return ticketRepo.findByCategory(category);
+        ArrayList<?> tickList = ticketService.getTicketsByCategory(category);
+        return tickList;
+
     }
 
     @GetMapping("/get/ticketsForApproval")
-    public ArrayList<Ticket> getTicketsForApproval()
+    public ArrayList<?> getTicketsForApproval()
     {
-        return ticketRepo.getApprovalRequest();
+        return ticketService.getTicketsForApproval();
     }
 
     @GetMapping("/get/ApprovedTickets")
-    public ArrayList<Ticket> getApprovedTickets()
+    public ArrayList<?> getApprovedTickets()
     {
-        return ticketRepo.getApprovedTickets();
+        return ticketService.getApprovedTickets();
     }
 
 
     @PutMapping("/ticket/approve")
-    public Ticket approveTicket(@RequestParam Long id)
+    public ResponseEntity<?> approveTicket(@RequestParam Long id)
     {
-        Optional<Ticket> ticket = ticketRepo.findById(id);
-        Ticket tkt = ticket.get();
-        tkt.setApproval(true);
-        return ticketRepo.save(tkt);
+        return ticketService.approveTicket(id);
     }
 
     @PutMapping("/ticket/reject")
-    public Ticket rejectTicket(@RequestParam Long id)
+    public ResponseEntity<?> rejectTicket(@RequestParam Long id)
     {
-        Optional<Ticket> ticket = ticketRepo.findById(id);
-        Ticket tkt = ticket.get();
-        tkt.setApproval(false);
-        return ticketRepo.save(tkt);
+        return ticketService.rejectTicket(id);
     }
 
 }

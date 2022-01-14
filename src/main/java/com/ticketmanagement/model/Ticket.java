@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
 @Table(name="ticket")
@@ -20,7 +21,9 @@ public class Ticket {
 	private String category;
 	
 	private boolean approval=false;
-	
+
+	private Date createdAt = new Date(System.currentTimeMillis());
+
 	public Ticket() {
 		
 	}
@@ -65,5 +68,12 @@ public class Ticket {
 	public void setApproval(boolean approval) {
 		this.approval = approval;
 	}
-	
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 }

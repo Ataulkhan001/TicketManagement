@@ -1,4 +1,4 @@
-package com.ticketmanagement.repository;
+package com.ticketmanagement.dao;
 
 import java.util.ArrayList;
 

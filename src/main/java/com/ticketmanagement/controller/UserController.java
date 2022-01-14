@@ -1,13 +1,14 @@
 package com.ticketmanagement.controller;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
+import com.ticketmanagement.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ticketmanagement.model.Ticket;
-import com.ticketmanagement.repository.TicketRepo;
+import com.ticketmanagement.dao.TicketRepo;
 
 @RestController
 @RequestMapping("/user")
@@ -16,25 +17,29 @@ public class UserController {
 	
 	@Autowired
 	TicketRepo ticketRepo;
+
+	@Autowired
+	TicketService ticketService;
 	
 	@PostMapping("/create")
-	public Ticket createTicket(@RequestBody Ticket ticket)
+	public ResponseEntity<?> createTicket(@RequestBody Ticket ticket) throws Exception
 	{
-		return ticketRepo.save(ticket);
-		
+		return ticketService.createTicket(ticket);
 	}
 	
 	@GetMapping("/get")
-	public Optional<Ticket> findTicketById(@RequestParam Long id)
-	{
-		return ticketRepo.findById(id);
+	public ResponseEntity<?> findTicketById(@RequestParam Long id) throws Exception {
+
+		ResponseEntity<?> response = ticketService.getTicketById(id);
+		return response;
 	}
 	
 
 	@GetMapping("/getByCat")
-	public ArrayList<Ticket> findTicktesByCategory(@RequestParam String category)
+	public ArrayList<?> findTicketsByCategory(@RequestParam String category)
 	{
-		return ticketRepo.findByCategory(category);
+		ArrayList<?> tickList = ticketService.getTicketsByCategory(category);
+		return tickList;
 	}
 
 }
