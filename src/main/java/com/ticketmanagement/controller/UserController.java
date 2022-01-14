@@ -21,7 +21,7 @@ public class UserController {
 	@Autowired
 	TicketService ticketService;
 	
-	@PostMapping("/create")
+	@PostMapping("/createTicket")
 	public ResponseEntity<?> createTicket(@RequestBody Ticket ticket) throws Exception
 	{
 		return ticketService.createTicket(ticket);

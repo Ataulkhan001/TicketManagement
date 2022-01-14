@@ -24,6 +24,8 @@ public class Ticket {
 
 	private Date createdAt = new Date(System.currentTimeMillis());
 
+	private Date status_changedAt;
+
 	public Ticket() {
 		
 	}
@@ -75,5 +77,13 @@ public class Ticket {
 
 	public void setCreatedAt(Date createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public Date getStatus_changedAt() {
+		return status_changedAt;
+	}
+
+	public void setStatus_changedAt(Date status_changedAt) {
+		this.status_changedAt = status_changedAt;
 	}
 }

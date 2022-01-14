@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -21,7 +22,17 @@ public class TicketService {
 
     public ResponseEntity<?> createTicket(Ticket ticket)
     {
-        return new ResponseEntity<Ticket>(ticketRepo.save(ticket),HttpStatus.OK);
+        try {
+            return new ResponseEntity<Ticket>(ticketRepo.save(ticket),HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            ApiResponse res = new ApiResponse();
+            res.setMessage("Ticket cannot be created, Please provide right values");
+            ResponseEntity<ApiResponse> response = new ResponseEntity<ApiResponse>(res,HttpStatus.BAD_REQUEST);
+            return response;
+        }
+
     }
 
     public ResponseEntity<?> getTicketById(Long id)
@@ -32,6 +43,7 @@ public class TicketService {
             Response res = new Response();
             res.setCategory(ticket.getCategory());
             res.setDescription(ticket.getDescription());
+            res.setCreatedAt(ticket.getCreatedAt());
             ResponseEntity<Response> response = new ResponseEntity<Response>(res, HttpStatus.OK);
             return response;
         }
@@ -51,7 +63,7 @@ public class TicketService {
         } else {
             ArrayList<ApiResponse> apiResponses = new ArrayList<>();
             ApiResponse apiResponse = new ApiResponse();
-            apiResponse.setMessage("No Any Ticket Found");
+            apiResponse.setMessage("No Any Ticket Found Of This Category");
             apiResponses.add(apiResponse);
             return apiResponses;
         }
@@ -99,6 +111,7 @@ public class TicketService {
             }
             else {
                 ticket1.setApproval(true);
+                ticket1.setStatus_changedAt(new Date(System.currentTimeMillis()));
                 ResponseEntity<Ticket> response = new ResponseEntity<Ticket>(ticketRepo.save(ticket1), HttpStatus.OK);
                 return response;
             }
@@ -126,6 +139,7 @@ public class TicketService {
             }
             else {
                 ticket1.setApproval(false);
+                ticket1.setStatus_changedAt(new Date(System.currentTimeMillis()));
                 ResponseEntity<Ticket> response = new ResponseEntity<Ticket>(ticketRepo.save(ticket1), HttpStatus.OK);
                 return response;
             }
